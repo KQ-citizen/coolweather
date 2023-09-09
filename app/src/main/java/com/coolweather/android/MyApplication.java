@@ -1,4 +1,4 @@
-package com.coolweather.android.util;
+package com.coolweather.android;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
