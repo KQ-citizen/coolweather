@@ -1,10 +1,10 @@
 package com.coolweather.android;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,10 +100,18 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) {
                     String weatherId = countyList.get(i).getWeatherId();
-                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                    intent.putExtra("weather_id", weatherId);
-                    startActivity(intent);
-//                    getActivity().finish();
+                    Activity activity =  (Activity) getActivity();
+                    if (activity instanceof MainActivity) {
+                        Intent intent = new Intent(activity, WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        activity.finish();
+                    } else if (activity instanceof WeatherActivity) {
+                        WeatherActivity weatherActivity = (WeatherActivity) activity;
+                        weatherActivity.drawerLayout.closeDrawers();
+                        weatherActivity.swipeRefresh.setRefreshing(true);
+                        weatherActivity.requestWeather(weatherId);
+                    }
                 }
             }
         });
